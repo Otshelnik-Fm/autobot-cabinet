@@ -1,0 +1,7 @@
+Name: AutoBot Cabinet;
+Version: 0.1;
+Support Core: 16.8.0;
+Description: Если это кабинет автобота - то в нем только вкладка Чат;
+Author: Владимир Дружаев (Otshelnik-Fm);
+Author URI: http://across-ocean.otshelnik-fm.ru/;
+Add-on URI: https://codeseller.ru/products/autobot-cabinet/;

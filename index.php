@@ -15,11 +15,9 @@ require_once 'settings.php';
 
 // подключим стиль и скрипт для удаления списка юзеров в чате и окна ответа
 function atbc_script(){
-    global $user_LK;
-
     //rcl_enqueue_style('autobot_style', rcl_addon_url('autobot.css', __FILE__), true);
 
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){ // Мы в кабинете и это кабинет Автобота
+    if( atbc_is_autobot() ){ // мы в кабинете Автобота
         rcl_enqueue_script('autobot_script', rcl_addon_url( 'res/autobot.js', __FILE__ ), false, true);
     }
 }
@@ -30,9 +28,7 @@ add_action('rcl_enqueue_scripts','atbc_script',10);
 // поэтому мы их вначале скроем стилями. А по готовности скрипт удалит их
 // так мы избавимся от их "моргания"
 function atbc_inline_style($styles){
-    global $user_LK;
-
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){
+    if( atbc_is_autobot() ){
         $styles .= '
             .office-theme-control .tc_usr_info,
             #rcl-office .user-status,
@@ -61,12 +57,21 @@ function atbc_inline_style($styles){
 add_filter('rcl_inline_styles','atbc_inline_style',10);
 
 
+// это кабинет автобота
+function atbc_is_autobot(){
+    global $user_LK;
+    if( rcl_is_office() && $user_LK == rcl_get_option('atbc_id') ) return true;
+
+    return false;
+}
+
+
 // удалим все табы кроме чата
 function atbc_del_except_chat_tab($data){
-    global $user_LK, $user_ID;
+    global $user_ID;
 
     if($data['id'] == 'fc_float_chat') return $data;            // float chat не удаляем
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){    // в кабинете и юзер - автобот
+    if( atbc_is_autobot() ){    // в кабинете автобота
         if($data['id'] == 'chat'){
             $data['name'] = 'Сообщения сайта';
             $data['order'] = 1;
@@ -95,23 +100,10 @@ function atbc_change_guest_text(){
 }
 
 
-// переименуем вкладку Чат в Сообщения
-function atbc_rename_chat_name($data){
-    global $user_LK;
-
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){     // в кабинете и юзер - автобот
-        $data['chat']['name'] = 'Сообщения сайта';
-    }
-    return $data;
-}
-//add_filter('rcl_tabs','atbc_rename_chat_name');
-
-
 
 // без токена юзер не сможет отправить сообщение боту - а юзер боту писать не должен
 function atbc_clear($data_hidden){
-    global $user_LK;
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){
+    if( atbc_is_autobot() ){
         unset($data_hidden['chat[token]']);
     }
     return $data_hidden;
@@ -121,11 +113,11 @@ add_filter('rcl_chat_hidden_fields','atbc_clear',5);
 
 // удалим кнопки подписаться и в черный список. Это в ЛК бота не нужно
 function atbc_del_feed_button(){
-    global $user_LK;
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){
-        remove_action('init','rcl_add_block_black_list_button',10);
-        remove_action('init','rcl_add_block_feed_button');
-    }
+    if( !atbc_is_autobot() ) return false;
+
+    remove_action('init','rcl_add_block_black_list_button',10);
+    remove_action('init','rcl_add_block_feed_button');
+
 }
 add_action('init','atbc_del_feed_button',5);
 
@@ -135,7 +127,7 @@ add_action('init','atbc_del_feed_button',5);
 // возле имени (используя шаблон theme control!) бота, слева от него выведем аву. Чтоб не было безлико
 function atbc_set_ava_autobot_before_name(){
     global $user_LK;
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){
+    if( atbc_is_autobot() ){
         echo '<div style="margin-right: 10px;">'.get_avatar($user_LK, 40).'</div>';
     }
 }
@@ -145,8 +137,7 @@ add_action('tc_pre_username','atbc_set_ava_autobot_before_name');
 
 // в чате с автоботом oembed на свой же сайт отключим
 function atbc_remove_autobot_oembed(){
-    global $user_LK;
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){
+    if( atbc_is_autobot() ){
         global $rcl_options;
         $rcl_options['chat']['oembed'] = 0; // отключим у бота oEmbed
     }
@@ -300,9 +291,7 @@ function atbc_chat_noread_messages_amount($user_id){
 
 // отменим стандартный вывод кнопки "Подробная информация" - "Информация о пользователе"
 function atbc_del_userinfo_button(){
-    global $user_LK;
-
-    if( $user_LK && $user_LK == rcl_get_option('atbc_id') ){
+    if( atbc_is_autobot() ){
         remove_filter('rcl_avatar_icons','rcl_add_user_info_button',10);
     }
 }

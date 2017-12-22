@@ -1,7 +1,7 @@
 jQuery(document).ready(function() {
-    jQuery('#rcl-office .user-status,.chat-users-box,.chat-form').remove(); // удалим лишние блоки
+    jQuery('#rcl-office .user-status,.chat-users-box,.chat-form,.tc_usr_info').remove(); // удалим лишние блоки
     
-    jQuery('#rcl-office[data-account="5"] .author-name').text('AutoBot');
+    jQuery('#rcl-office .author-name').text('AutoBot');
     
     var count = jQuery('#ac_autobot .rcb_nmbr');
     

@@ -53,6 +53,12 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 
 
 == Changelog ==
+= 2018-01-04 =
+v1.1
+* Исправлено падение в админке в режиме мультисайта - на панели управления сайтами (Управление сетью->Консоль)
+Баг мультисайта описан здесь https://otshelnik-fm.ru/?p=3629
+
+
 = 2017-12-22 =
 v1.0
 * Release

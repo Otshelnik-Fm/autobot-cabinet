@@ -1,5 +1,5 @@
 Name: AutoBot Cabinet;
-Version: 1.1;
+Version: 1.2;
 Support Core: 16.9.0;
 Description: Если это кабинет автобота - то в нем только вкладка Сообщения сайта. Автобот - автоматический помощник сайта;
 Author: Владимир Дружаев (Otshelnik-Fm);

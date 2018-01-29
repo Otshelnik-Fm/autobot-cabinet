@@ -53,6 +53,9 @@ function atbc_inline_style($styles){
             .rcl-chat .aub_active .message-box {
                 filter: hue-rotate(160deg);
             }
+            span.rcl-tab-button:not([data-tab="chat"]):not([data-tab="profile"]) {
+                display: none;
+            }
         ';
     }
 
@@ -74,8 +77,9 @@ function atbc_is_autobot(){
 function atbc_del_except_chat_tab($data){
     global $user_ID;
 
-    if($data['id'] == 'fc_float_chat') return $data;            // float chat не удаляем
-    if( atbc_is_autobot() ){    // в кабинете автобота
+    if($data['id'] == 'fc_float_chat') return $data;    // float chat не удаляем
+    if( atbc_is_autobot() ){                            // в кабинете автобота
+        if($data['id'] == 'profile') return $data;      // автобот пусть настраивает профиль свой
         if($data['id'] == 'chat'){
             $data['name'] = 'Сообщения сайта';
             $data['order'] = 1;
@@ -301,4 +305,38 @@ function atbc_del_userinfo_button(){
 }
 add_action('init', 'atbc_del_userinfo_button');
 
+
+// миничат у автобота скроем textarea
+function atbc_minichat_clear_autobot_textarea(){
+    global $rcl_options;
+
+    if(!isset($rcl_options['chat']['contact_panel'])||!$rcl_options['chat']['contact_panel']) return false; // выкл миничат
+    if( !is_user_logged_in() ) return false; // гость
+
+    $autobot_id = rcl_get_option('atbc_id');
+
+// стилями скроем быстро, пока по таймауту не удалится нужная инфа скриптом
+$style = '
+#rcl-chat-noread-box .rcl-mini-chat[data-ids="'.$autobot_id.'"] .chat-form{
+    display:none;
+}
+';
+
+    $script = '
+jQuery("#rcl-chat-noread-box .rcl-chat-user.contact-box").on("click", function () {
+    var idContact = jQuery(this).data("contact");
+    jQuery("#rcl-chat-noread-box .rcl-mini-chat").attr("data-ids", idContact);
+
+    if('.$autobot_id.' === idContact){
+        setTimeout(function(){
+            jQuery("#rcl-chat-noread-box .rcl-chat.chat-private").attr("data-token", "");
+            jQuery("#rcl-chat-noread-box .chat-form").remove();
+        },1500);
+    }
+});
+';
+
+    echo '<script>'.$script.'</script><style>'.$style.'</style>';
+}
+add_action('wp_footer', 'atbc_minichat_clear_autobot_textarea');
 

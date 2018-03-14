@@ -17,15 +17,37 @@ if( is_admin() && !is_network_admin() ){
 
 
 
+// функционал для чатботов
+require_once 'inc/for-any-bots.php';
+
+
+
+// ресурсы для чат-ботов
+function atbc_core_resource(){
+    if ( !is_user_logged_in() ) return false;
+
+    rcl_enqueue_style('autobot_core_style', rcl_addon_url('res/autobot-core.css', __FILE__));
+    rcl_enqueue_script('autobot_core_script', rcl_addon_url( 'res/autobot-core.js', __FILE__ ), false, true);
+}
+add_action('rcl_chat', 'atbc_core_resource'); // мы в чате
+
+
+
 // подключим стиль и скрипт для удаления списка юзеров в чате и окна ответа
 function atbc_script(){
-    //rcl_enqueue_style('autobot_style', rcl_addon_url('autobot.css', __FILE__), true);
-
     if( atbc_is_autobot() ){ // мы в кабинете Автобота
         rcl_enqueue_script('autobot_script', rcl_addon_url( 'res/autobot.js', __FILE__ ), false, true);
     }
 }
 add_action('rcl_enqueue_scripts','atbc_script',10);
+
+
+// идентификатор автобота для прочих ботов
+function atbc_dlobal_init(){
+     define('AUTOBOT_ID', rcl_get_option('atbc_id'));
+}
+add_action('init', 'atbc_dlobal_init');
+
 
 
 // выше удалили блоки скриптом - но они с запаздыванием отрабатывают

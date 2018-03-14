@@ -1,6 +1,7 @@
 Name: AutoBot Cabinet;
-Version: 1.2;
-Support Core: 16.9.0;
+Version: 2.0;
+Support Core: 16.11.0;
+Parent Addon: rcl-chat;
 Description: Если это кабинет автобота - то в нем только вкладка Сообщения сайта. Автобот - автоматический помощник сайта;
 Author: Владимир Дружаев (Otshelnik-Fm);
 Author URI: https://otshelnik-fm.ru/;

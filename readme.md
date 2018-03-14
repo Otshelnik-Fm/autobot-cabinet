@@ -17,9 +17,13 @@
 ## Demo:  
 
 Демонстрация работы на [моем сайте](https://otshelnik-fm.ru/author/autobot/).  
+Демо дополнений к автоботу - [чат-боты](https://otshelnik-fm.ru/chat/) - нужно залогиниться чтобы увидеть.  
 После регистрации приветственное сообщение от допа [Bonus on Registration](https://codeseller.ru/products/bonus-on-registration-bonus-za-registraciyu-i-lichnoe-soobshhenie/)  
 А после оформления подписки через доп [Subscription Two](https://codeseller.ru/products/subscription-two/)  
 : автобот отправляет сообщения  
+
+Видео:  
+[![See video](https://img.youtube.com/vi/IXerberpR1o/0.jpg)](https://www.youtube.com/watch?v=IXerberpR1o "See video")  
 
 ------------------------------
 
@@ -53,10 +57,16 @@
 ## FAQ:  
 **С какими дополнениями он работает:**  
 
-Пока их три:  
 [Hello private message](https://codeseller.ru/?p=8341)  
 [Bonus on Registration](https://codeseller.ru/?p=8350)  
 [Subscription Two](https://codeseller.ru/?p=16774)  
+
++дополнения чат-ботов (ссылки появятся позже)  
+Bot AnekBot (анекдоты)  
+Bot Bash.org (истории с Bash.org)  
+Bot Exchange Rates (курсы доллара и евро)  
+Bot Rules (правила чата)  
+Bot User Info (информация о пользователе и краткая статистика)  
 
 
 **Не могу ему написать:**  
@@ -76,6 +86,13 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 ------------------------------
 
 ## Changelog:  
+**2018-03-12**  
+v2.0  
+* Новый функционал для поддержки сторонних ботов  
+* Константа <code>AUTOBOT_ID</code> - позволяет легко получить идентификатор автобота. Полезно для сторонних чат-ботов  
+
+
+
 **2018-01-30**  
 v1.2  
 * В кабинете автобота (если он зайдет сам в свой профиль) все вкладки скроются кроме ЛС и Профиль.  

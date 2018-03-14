@@ -29,10 +29,17 @@
 == FAQ ==
 <h3>С какими дополнениями он работает:</h3>
 
-Пока их три:
 <a href="https://codeseller.ru/?p=8341" target="_blank">Hello private message</a>
 <a href="https://codeseller.ru/?p=8350" target="_blank">Bonus on Registration</a>
 <a href="https://codeseller.ru/?p=16774" target="_blank">Subscription Two</a>
+
++дополнения чат-ботов (ссылки появятся позже)
+Bot AnekBot (анекдоты)
+Bot Bash.org (истории с Bash.org)
+Bot Exchange Rates (курсы доллара и евро)
+Bot Rules (правила чата)
+Bot User Info (информация о пользователе и краткая статистика)
+
 
 
 <h3>Не могу ему написать:</h3>
@@ -53,6 +60,12 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 
 
 == Changelog ==
+= 2018-03-12 =
+v2.0
+* Новый функционал для поддержки сторонних ботов
+* Константа <code>AUTOBOT_ID</code> - позволяет легко получить идентификатор автобота. Полезно для сторонних чат-ботов
+
+
 = 2018-01-30 =
 v1.2
 * В кабинете автобота (если он зайдет сам в свой профиль) все вкладки скроются кроме ЛС и Профиль.

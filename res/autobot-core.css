@@ -1,0 +1,25 @@
+.chat-form form {
+    position: relative;
+}
+.cer_box {
+    display: inline-block;
+    line-height: normal;
+    margin: 0 0 1px 0;
+}
+.cer_button {
+    align-items: center;
+    background-color: #f5f5f5;
+    border: 1px solid #e5e5e5;
+    cursor: pointer;
+    display: inline-flex;
+    margin: 0 5px 5px 0;
+    padding: 3px 6px;
+}
+.cer_button:hover {
+    background-color: #eee;
+    border-color: #ddd;
+}
+.cer_button .fa {
+    margin: 0 4px 0 0;
+}
+

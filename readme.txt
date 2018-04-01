@@ -33,12 +33,13 @@
 <a href="https://codeseller.ru/?p=8350" target="_blank">Bonus on Registration</a>
 <a href="https://codeseller.ru/?p=16774" target="_blank">Subscription Two</a>
 
-+дополнения чат-ботов (ссылки появятся позже)
-Bot AnekBot (анекдоты)
-Bot Bash.org (истории с Bash.org)
-Bot Exchange Rates (курсы доллара и евро)
-Bot Rules (правила чата)
-Bot User Info (информация о пользователе и краткая статистика)
++дополнения чат-ботов 
+<a href="https://codeseller.ru/?p=17441" target="_blank">Bot AnekBot (анекдоты)</a>
+<a href="https://codeseller.ru/?p=17446" target="_blank">Bot Bash.org (истории с Bash.org)</a>
+<a href="https://codeseller.ru/?p=17450" target="_blank">Bot Exchange Rates (курсы доллара и евро)</a>
+<a href="https://codeseller.ru/?p=17454" target="_blank">Bot Rules (правила чата)</a>
+<a href="https://codeseller.ru/?p=17458" target="_blank">Bot User Info (информация о пользователе и краткая статистика)</a>
+<a href="https://codeseller.ru/?p=17655" target="_blank">Bot Weather In The City (Погода в заданном городе)</a>
 
 
 
@@ -57,12 +58,16 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 У меня есть еще пара задумок дополнений к нему - в дальнейшем список совместимых дополнений расширяющих его поведение увеличится.
 
 
+<h3>Есть описание API и работы с ним? как расширить?</h3>
+- да. В одной записи я сделал обзор некоторых функций и пример добавления чат-бота: <a href="https://codeseller.ru/?p=17464" target="_blank">Пишем дочернее дополнение для WP-Recall — чат-бот погоды в городе (используя ядро допа AutoBot Cabinet)</a> 
+
+
 
 
 == Changelog ==
 = 2018-03-12 =
 v2.0
-* Новый функционал для поддержки сторонних ботов
+* Новый функционал для поддержки сторонних ботов (есть мануал - читай FAQ)
 * Константа <code>AUTOBOT_ID</code> - позволяет легко получить идентификатор автобота. Полезно для сторонних чат-ботов
 
 

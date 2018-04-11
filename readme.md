@@ -19,8 +19,7 @@
 Демонстрация работы на [моем сайте](https://otshelnik-fm.ru/author/autobot/).  
 Демо дополнений к автоботу - [чат-боты](https://otshelnik-fm.ru/chat/) - нужно залогиниться чтобы увидеть.  
 После регистрации приветственное сообщение от допа [Bonus on Registration](https://codeseller.ru/products/bonus-on-registration-bonus-za-registraciyu-i-lichnoe-soobshhenie/)  
-А после оформления подписки через доп [Subscription Two](https://codeseller.ru/products/subscription-two/)  
-: автобот отправляет сообщения  
+А после оформления подписки через доп [Subscription Two](https://codeseller.ru/products/subscription-two/) - автобот отправляет сообщения  
 
 Видео:  
 [![See video](https://img.youtube.com/vi/IXerberpR1o/0.jpg)](https://www.youtube.com/watch?v=IXerberpR1o "See video")  

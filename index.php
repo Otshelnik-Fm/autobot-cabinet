@@ -362,3 +362,41 @@ jQuery("#rcl-chat-noread-box .rcl-chat-user.contact-box").on("click", function (
 }
 add_action('wp_footer', 'atbc_minichat_clear_autobot_textarea');
 
+
+// всплывающие ЛС. Если это автобот
+function atbc_floatpm_clear_autobot_textarea(){
+    if( !is_user_logged_in() ) return false;        // гость
+
+    global $user_ID;
+    if( !rcl_is_office($user_ID) ) return false;    // в чужом ЛК
+
+    $autobot_id = rcl_get_option('atbc_id');
+
+// стилями скроем быстро, пока по таймауту не удалится нужная инфа скриптом
+$style = '
+.rcl-chat-window.ssi-modal .chat-private[data-ids="'.$autobot_id.'"] .chat-form{
+    display:none;
+}
+';
+
+    $script = "
+var idContacts = '';
+jQuery('#tab-chat .contact-box').on('click', function () {
+    idContacts = jQuery(this).data('contact');
+});
+
+function atbcClearAutobotPM(e){
+    if(".$autobot_id." === idContacts){
+        jQuery('.rcl-chat-window.ssi-modal .chat-private').attr('data-ids', idContacts);
+        setTimeout(function(){
+            jQuery('.rcl-chat-window.ssi-modal .chat-private').attr('data-token', '');
+            jQuery('.rcl-chat-window.ssi-modal .chat-form').remove();
+        },1500);
+    }
+}
+rcl_add_action('rcl_get_ajax_chat_window','atbcClearAutobotPM');
+";
+
+    echo '<script>'.$script.'</script><style>'.$style.'</style>';
+}
+add_action('wp_footer', 'atbc_floatpm_clear_autobot_textarea');

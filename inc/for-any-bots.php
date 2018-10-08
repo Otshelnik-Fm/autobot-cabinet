@@ -19,13 +19,13 @@ if (!defined('ABSPATH')) exit;
 //    'callback'=>'',
 //];
 function autobot_add_button($arg){
-    $ico = ( isset($arg['icon']) ) ? '<i class="fa '.$arg['icon'].'"></i>' : '';
+    $ico = ( isset($arg['icon']) ) ? '<i class="rcli '.$arg['icon'].'"></i>' : '';
     $text = ( isset($arg['text']) ) ? $arg['text'] : '';
     $command = ( isset($arg['command']) ) ? $arg['command'] : '';
 
     $dop_class = '';
     $data_action = '';
-    
+
     if( isset($arg['exclude_db']) && isset($arg['callback']) ){
         $dop_class = 'cer_not_db';
         $data_action = 'data-cer_action="'.$arg['callback'].'"';

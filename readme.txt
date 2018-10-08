@@ -65,6 +65,11 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 
 
 == Changelog ==
+= 2018-10-08 =
+v2.2  
+* Поддержка WP-Recall 16.16
+
+
 = 2018-09-20 =
 v2.1  
 * В списке контактов, на вкладке "Чат", в всплывающем окне пофиксил ситуацию - когда можно было писать автоботу.

@@ -18,7 +18,6 @@ $('.cer_button.cer_not_db').on('click',function(){
     rcl_ajax({
         data: 'action='+action,
         success: function(data){
-
             if(data['content']){
                 setTimeout(function(){
                     $('.chat-messages').append(data['content']).find('.chat-message').last().animateCss('zoomIn');
@@ -31,6 +30,5 @@ $('.cer_button.cer_not_db').on('click',function(){
       	
     return false;
 });
-    
     
 })(jQuery);

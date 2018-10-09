@@ -22,6 +22,15 @@ require_once 'inc/for-any-bots.php';
 
 
 
+// это кабинет автобота
+function atbc_is_autobot(){
+    global $user_LK;
+    if( rcl_is_office() && $user_LK == AUTOBOT_ID ) return true;
+
+    return false;
+}
+
+
 // ресурсы для чат-ботов
 function atbc_core_resource(){
     if ( !is_user_logged_in() ) return false;
@@ -36,6 +45,8 @@ add_action('rcl_chat', 'atbc_core_resource'); // мы в чате
 // подключим стиль и скрипт для удаления списка юзеров в чате и окна ответа
 function atbc_script(){
     if( atbc_is_autobot() ){ // мы в кабинете Автобота
+        if ( !is_user_logged_in() ) return false;
+
         rcl_enqueue_script('autobot_script', rcl_addon_url( 'res/autobot.js', __FILE__ ), false, true);
     }
 }
@@ -44,9 +55,9 @@ add_action('rcl_enqueue_scripts','atbc_script',10);
 
 // идентификатор автобота для прочих ботов
 function atbc_dlobal_init(){
-     define('AUTOBOT_ID', rcl_get_option('atbc_id'));
+     define('AUTOBOT_ID', rcl_get_option('atbc_id', 19667722446));
 }
-add_action('init', 'atbc_dlobal_init');
+add_action('init', 'atbc_dlobal_init', 5);
 
 
 
@@ -85,14 +96,6 @@ function atbc_inline_style($styles){
 }
 add_filter('rcl_inline_styles','atbc_inline_style',10);
 
-
-// это кабинет автобота
-function atbc_is_autobot(){
-    global $user_LK;
-    if( rcl_is_office() && $user_LK == rcl_get_option('atbc_id') ) return true;
-
-    return false;
-}
 
 
 // удалим все табы кроме чата
@@ -205,13 +208,13 @@ function atbc_chat_send_notify_messages(){
 
         foreach($data as $author_id=>$array_messages){
             $url = rcl_get_tab_permalink($author_id,'chat');
-            if($author_id == rcl_get_option('atbc_id')) $url = get_author_posts_url(rcl_get_option('atbc_id'));
+            if($author_id == AUTOBOT_ID) $url = get_author_posts_url(AUTOBOT_ID);
             $content .= '<div style="overflow:hidden;clear:both;border-bottom:1px solid #e5e5e5;margin: 0 0 10px;">';
                 $content .= '<h3 style="margin: 0 0 10px;">Вам было отправлено сообщение:</h3>';
                 $content .= '<div style="float:left;margin-right:15px;">'.get_avatar($author_id,55).'</div>';
                 $content .= '<p style="margin: 0 0 10px;">от пользователя: "'.get_the_author_meta('display_name',$author_id).'"</p>';
 
-                if($mailtext || $author_id == rcl_get_option('atbc_id')){ // в настройках стоит опция "отправлять полный текст сообщения", или это автобот
+                if($mailtext || $author_id == AUTOBOT_ID){ // в настройках стоит опция "отправлять полный текст сообщения", или это автобот
                     $message = implode('<br>',$array_messages);
 
                     $content .= '<p style="margin: 0 0 10px;"><b>Текст сообщения:</b></p>';
@@ -221,7 +224,7 @@ function atbc_chat_send_notify_messages(){
                 $content .= '<p>Вы можете прочитать сообщение перейдя по ссылке: <a href="'.$url.'">'.$url.'</a></p>';
 
                 if(rcl_exist_addon('subscription-two')){
-                    if($author_id == rcl_get_option('atbc_id')){
+                    if($author_id == AUTOBOT_ID){
                         $user_cab = rcl_format_url(get_author_posts_url($addressat_id),'sbt_tab');
                         $content .= '<p><small>';
                             $content .= 'Управление подпиской вам доступно в вашем личном кабинете: ';
@@ -264,7 +267,7 @@ function atbc_bar_add_chat_icon(){
         $autobot_url = '/author/autobot/';
         $label = 'Подписки';
     } else {
-        $autobot_url = get_author_posts_url( rcl_get_option('atbc_id') ); // дает +2 запроса к бд. Поэтому напрямую его на своем домене
+        $autobot_url = get_author_posts_url( AUTOBOT_ID ); // дает +2 запроса к бд. Поэтому напрямую его на своем домене
         $label = 'Сообщения';
     }
 
@@ -296,20 +299,18 @@ function atbc_bar_add_chat_icon(){
 function atbc_chat_noread_messages_amount($user_id){
     global $wpdb;
 
-    $autobot_id = rcl_get_option('atbc_id');
-
     $table = RCL_PREF ."chat_messages";
     $total_result = $wpdb->get_row("
         SELECT
             (SELECT COUNT(t1.message_id)
                 FROM ".$table." AS t1
-                WHERE t1.user_id NOT IN (".$autobot_id.")
+                WHERE t1.user_id NOT IN (".AUTOBOT_ID.")
                 AND t1.private_key = '".$user_id."'
                 AND t1.message_status = '0') AS messages,
 
             (SELECT COUNT(t2.message_id)
                 FROM ".$table." AS t2
-                WHERE t2.user_id = ".$autobot_id."
+                WHERE t2.user_id = ".AUTOBOT_ID."
                 AND t2.private_key = '".$user_id."'
                 AND t2.message_status = '0') AS autobot
         ",ARRAY_A);
@@ -335,11 +336,9 @@ function atbc_minichat_clear_autobot_textarea(){
     if(!isset($rcl_options['chat']['contact_panel'])||!$rcl_options['chat']['contact_panel']) return false; // выкл миничат
     if( !is_user_logged_in() ) return false; // гость
 
-    $autobot_id = rcl_get_option('atbc_id');
-
 // стилями скроем быстро, пока по таймауту не удалится нужная инфа скриптом
 $style = '
-#rcl-chat-noread-box .rcl-mini-chat[data-ids="'.$autobot_id.'"] .chat-form{
+#rcl-chat-noread-box .rcl-mini-chat[data-ids="'.AUTOBOT_ID.'"] .chat-form{
     display:none;
 }
 ';
@@ -349,7 +348,7 @@ jQuery("#rcl-chat-noread-box .rcl-chat-user.contact-box").on("click", function (
     var idContact = jQuery(this).data("contact");
     jQuery("#rcl-chat-noread-box .rcl-mini-chat").attr("data-ids", idContact);
 
-    if('.$autobot_id.' === idContact){
+    if('.AUTOBOT_ID.' === idContact){
         setTimeout(function(){
             jQuery("#rcl-chat-noread-box .rcl-chat.chat-private").attr("data-token", "");
             jQuery("#rcl-chat-noread-box .chat-form").remove();
@@ -358,9 +357,13 @@ jQuery("#rcl-chat-noread-box .rcl-chat-user.contact-box").on("click", function (
 });
 ';
 
-    echo '<script>'.$script.'</script><style>'.$style.'</style>';
+    // сожмём в строку
+    $script_min = atbc_inline($script);
+    $style_min = atbc_inline($style);
+
+    echo "\r\n<script>".$script_min.'</script><style>'.$style_min."</style>\r\n";
 }
-add_action('wp_footer', 'atbc_minichat_clear_autobot_textarea');
+add_action('wp_footer', 'atbc_minichat_clear_autobot_textarea', 15);
 
 
 // всплывающие ЛС. Если это автобот
@@ -370,23 +373,25 @@ function atbc_floatpm_clear_autobot_textarea(){
     global $user_ID;
     if( !rcl_is_office($user_ID) ) return false;    // в чужом ЛК
 
-    $autobot_id = rcl_get_option('atbc_id');
-
 // стилями скроем быстро, пока по таймауту не удалится нужная инфа скриптом
 $style = '
-.rcl-chat-window.ssi-modal .chat-private[data-ids="'.$autobot_id.'"] .chat-form{
+.rcl-chat-window.ssi-modal .chat-private[data-ids="'.AUTOBOT_ID.'"] .chat-form{
     display:none;
 }
 ';
 
     $script = "
 var idContacts = '';
-jQuery('#tab-chat .contact-box').on('click', function () {
-    idContacts = jQuery(this).data('contact');
-});
+function atbcGetId(){
+    jQuery(document).on('click','#tab-chat .contact-box', function() {
+        idContacts = jQuery(this).data('contact');
+    });
+}
+rcl_add_action('rcl_footer','atbcGetId');
+rcl_add_action('rcl_get_ajax_chat_window','atbcGetId');
 
 function atbcClearAutobotPM(e){
-    if(".$autobot_id." === idContacts){
+    if(".AUTOBOT_ID." === idContacts){
         jQuery('.rcl-chat-window.ssi-modal .chat-private').attr('data-ids', idContacts);
         setTimeout(function(){
             jQuery('.rcl-chat-window.ssi-modal .chat-private').attr('data-token', '');
@@ -397,6 +402,26 @@ function atbcClearAutobotPM(e){
 rcl_add_action('rcl_get_ajax_chat_window','atbcClearAutobotPM');
 ";
 
-    echo '<script>'.$script.'</script><style>'.$style.'</style>';
+    // сожмём в строку
+    $script_min = atbc_inline($script);
+    $style_min = atbc_inline($style);
+
+    echo "<script>".$script_min.'</script><style>'.$style_min."</style>\r\n";
 }
-add_action('wp_footer', 'atbc_floatpm_clear_autobot_textarea');
+add_action('wp_footer', 'atbc_floatpm_clear_autobot_textarea', 15);
+
+
+// сожмем скрипты или стили для инлайна
+function atbc_inline($src){
+
+    // удаляем пробелы, переносы, табуляцию
+    $src_cleared =  preg_replace('/ {2,}/','',str_replace(array("\r\n", "\r", "\n", "\t"), '', $src));
+
+    // пробелы перед :
+    $src_non_space = str_replace(': ', ':', $src_cleared);
+
+    // перед скобкой пробел не нужен
+    $src_sanity = str_replace(' {', '{', $src_non_space);
+
+    return $src_sanity;
+}

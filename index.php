@@ -32,25 +32,28 @@ function atbc_is_autobot(){
 
 
 // ресурсы для чат-ботов
-function atbc_core_resource(){
+function atbc_load_resource(){
+    if( atbc_is_autobot() ){ // это кабинет Автобота
+        rcl_enqueue_style('autobot_lk', rcl_addon_url('res/autobot-lk.css', __FILE__));
+
+        if ( is_user_logged_in() ){
+            rcl_enqueue_script('autobot_lk_logged', rcl_addon_url( 'res/autobot-lk-logged.js', __FILE__ ), false, true);
+        }
+    }
+
     if ( !is_user_logged_in() ) return false;
 
-    rcl_enqueue_style('autobot_core_style', rcl_addon_url('res/autobot-core.css', __FILE__));
-    rcl_enqueue_script('autobot_core_script', rcl_addon_url( 'res/autobot-core.js', __FILE__ ), false, true);
-}
-add_action('rcl_chat', 'atbc_core_resource'); // мы в чате
-
-
-
-// подключим стиль и скрипт для удаления списка юзеров в чате и окна ответа
-function atbc_script(){
-    if( atbc_is_autobot() ){ // мы в кабинете Автобота
-        if ( !is_user_logged_in() ) return false;
-
-        rcl_enqueue_script('autobot_script', rcl_addon_url( 'res/autobot.js', __FILE__ ), false, true);
+    global $user_ID;
+    if( rcl_is_office($user_ID) ){
+        rcl_enqueue_script('autobot_user_lk', rcl_addon_url( 'res/user-lk.js', __FILE__ ), false, true);
     }
+
+    rcl_enqueue_style('autobot_core_style', rcl_addon_url('res/atbc-core.css', __FILE__));
+    rcl_enqueue_script('autobot_core_script', rcl_addon_url( 'res/atbc-core.js', __FILE__ ), false, true);
+
 }
-add_action('rcl_enqueue_scripts','atbc_script',10);
+add_action('rcl_enqueue_scripts', 'atbc_load_resource');
+
 
 
 // идентификатор автобота для прочих ботов
@@ -61,36 +64,29 @@ add_action('init', 'atbc_dlobal_init', 5);
 
 
 
+// доступна js-переменная Rcl.autobot - содержит id автобота
+function atbc_variable_autobot($data){
+    $data['autobot'] = AUTOBOT_ID;
+
+    return $data;
+}
+add_filter('rcl_init_js_variables','atbc_variable_autobot',10);
+
+
+// критичные стили
 // выше удалили блоки скриптом - но они с запаздыванием отрабатывают
 // поэтому мы их вначале скроем стилями. А по готовности скрипт удалит их
 // так мы избавимся от их "моргания"
 function atbc_inline_style($styles){
-    if( atbc_is_autobot() ){
-        $styles .= '
-            .office-theme-control .tc_usr_info,
-            #rcl-office .user-status,
-            .chat-users-box,
-            .chat-form {
-                display: none;
-            }
-            #lk-content .message-manager > span {
-                padding: 0 0 20px;
-            }
-            .chat-messages-box .user-avatar a {
-                pointer-events: none;
-            }
-            #lk-content .chat-message .message-time {
-                font-size: 14px;
-                color: #555;
-            }
-            .rcl-chat .aub_active .message-box {
-                filter: hue-rotate(160deg);
-            }
-            span.rcl-tab-button:not([data-tab="chat"]):not([data-tab="profile"]) {
-                display: none;
-            }
-        ';
-    }
+    if( !atbc_is_autobot() ) return $styles;
+
+    $styles .= '
+        .office-theme-control .tc_usr_info,
+        #rcl-office .user-status,
+        .chat-users-box {
+            display: none;
+        }
+    ';
 
     return $styles;
 }
@@ -98,50 +94,45 @@ add_filter('rcl_inline_styles','atbc_inline_style',10);
 
 
 
-// удалим все табы кроме чата
-function atbc_del_except_chat_tab($data){
+// в кабинете автобота удалим лишние вкладки
+function atbc_del_except_chat_tab($tabs){
+    if( !atbc_is_autobot() ) return $tabs;
+
     global $user_ID;
 
-    if($data['id'] == 'fc_float_chat') return $data;    // float chat не удаляем
-    if( atbc_is_autobot() ){                            // в кабинете автобота
-        if($data['id'] == 'profile') return $data;      // автобот пусть настраивает профиль свой
-        if($data['id'] == 'chat'){
-            $data['name'] = 'Сообщения сайта';
-            $data['order'] = 1;
-            $data['first'] = 1;
-            if(!$user_ID){                              // гость. ему свой текст
-                $data['content']['0']['callback']['name'] = 'atbc_change_guest_text';
-            }
-            //remove_action('cowabunga_user_menu', 'liberty_menu_buttons', 10); // удалим вкладки слева
-            return $data;                               // нужен массив личного чата
+    foreach ($tabs as $tab){
+        if( $user_ID == AUTOBOT_ID && $tab['id'] == 'profile' ){
+            $tab['order'] = 2;
+            if( isset($tab['first']) ) unset($tab['first']);
+
+            $n_tab[] = $tab;
         }
-        else{
-            unset($data);                               // все остальное удалим
+
+        if( $tab['id'] == 'chat' ){
+            $tab['name'] = 'Сообщения сайта';
+            $tab['order'] = 1;
+            $tab['first'] = 1;
+            if(!$user_ID){                                          // гость. ему свой текст
+                $tab['content']['0']['callback']['name'] = 'atbc_change_guest_text';
+            }
+
+            $n_tab[] = $tab;
         }
     }
-    if(isset($data)) return $data;
+
+    return $n_tab;
 }
-add_filter('rcl_pre_output_tab','atbc_del_except_chat_tab');
+add_filter('rcl_tabs','atbc_del_except_chat_tab');
 
 
 // для гостя сменим текст с "Авторизуйтесь, чтобы написать пользователю сообщение"
 function atbc_change_guest_text(){
-   $chat = '<div class="chat-notice">'
-            . '<span class="notice-error">Этот бот сможет рассылать вам новости сайта, подписки и уведомления. Войдите на сайт и проверьте его работу</span>'
-            . '</div>';
-    return $chat;
+   $guest_text = '<div class="chat-notice">'
+                   . '<span class="notice-error">Этот бот сможет рассылать вам новости сайта, подписки и уведомления.<br/>'
+                       . 'Войдите на сайт и проверьте его работу</span>'
+                . '</div>';
+    return $guest_text;
 }
-
-
-
-// без токена юзер не сможет отправить сообщение боту - а юзер боту писать не должен
-function atbc_clear($data_hidden){
-    if( atbc_is_autobot() ){
-        unset($data_hidden['chat[token]']);
-    }
-    return $data_hidden;
-}
-add_filter('rcl_chat_hidden_fields','atbc_clear',5);
 
 
 // удалим кнопки подписаться и в черный список. Это в ЛК бота не нужно
@@ -154,6 +145,26 @@ function atbc_del_feed_button(){
 }
 add_action('init','atbc_del_feed_button',5);
 
+
+
+// отменим стандартный вывод кнопки "Подробная информация" - "Информация о пользователе"
+function atbc_del_userinfo_button(){
+    if( atbc_is_autobot() ){
+        remove_filter('rcl_avatar_icons','rcl_add_user_info_button',10);
+    }
+}
+add_action('init', 'atbc_del_userinfo_button');
+
+
+
+// без токена юзер не сможет отправить сообщение боту - а юзер боту писать не должен
+function atbc_clear($data_hidden){
+    if( atbc_is_autobot() ){
+        unset($data_hidden['chat[token]']);
+    }
+    return $data_hidden;
+}
+add_filter('rcl_chat_hidden_fields','atbc_clear',5);
 
 
 
@@ -176,8 +187,6 @@ function atbc_remove_autobot_oembed(){
     }
 }
 add_action('init', 'atbc_remove_autobot_oembed',5);
-
-
 
 
 
@@ -295,7 +304,7 @@ function atbc_bar_add_chat_icon(){
 
 // посчитаем непрочитанные сообщения отдельно:
 // все сообщения - исключая автобота
-// и отдельно соощения автобота. Одним запросом
+// и отдельно сообщения автобота. Одним запросом
 function atbc_chat_noread_messages_amount($user_id){
     global $wpdb;
 
@@ -320,15 +329,6 @@ function atbc_chat_noread_messages_amount($user_id){
 
 
 
-// отменим стандартный вывод кнопки "Подробная информация" - "Информация о пользователе"
-function atbc_del_userinfo_button(){
-    if( atbc_is_autobot() ){
-        remove_filter('rcl_avatar_icons','rcl_add_user_info_button',10);
-    }
-}
-add_action('init', 'atbc_del_userinfo_button');
-
-
 // миничат у автобота скроем textarea
 function atbc_minichat_clear_autobot_textarea(){
     global $rcl_options;
@@ -347,14 +347,17 @@ $style = '
 jQuery("#rcl-chat-noread-box .rcl-chat-user.contact-box").on("click", function () {
     var idContact = jQuery(this).data("contact");
     jQuery("#rcl-chat-noread-box .rcl-mini-chat").attr("data-ids", idContact);
-
-    if('.AUTOBOT_ID.' === idContact){
+});
+function atbcCleaMiniChat(){
+    var idContact = jQuery("#rcl-chat-noread-box .rcl-mini-chat").attr("data-ids");
+    if('.AUTOBOT_ID.' == idContact){
         setTimeout(function(){
-            jQuery("#rcl-chat-noread-box .rcl-chat.chat-private").attr("data-token", "");
+            jQuery("#rcl-chat-noread-box .rcl-chat.chat-private").attr("data-token","");
             jQuery("#rcl-chat-noread-box .chat-form").remove();
         },1500);
     }
-});
+}
+rcl_add_action("rcl_init_chat","atbcCleaMiniChat");
 ';
 
     // сожмём в строку
@@ -365,50 +368,6 @@ jQuery("#rcl-chat-noread-box .rcl-chat-user.contact-box").on("click", function (
 }
 add_action('wp_footer', 'atbc_minichat_clear_autobot_textarea', 15);
 
-
-// всплывающие ЛС. Если это автобот
-function atbc_floatpm_clear_autobot_textarea(){
-    if( !is_user_logged_in() ) return false;        // гость
-
-    global $user_ID;
-    if( !rcl_is_office($user_ID) ) return false;    // в чужом ЛК
-
-// стилями скроем быстро, пока по таймауту не удалится нужная инфа скриптом
-$style = '
-.rcl-chat-window.ssi-modal .chat-private[data-ids="'.AUTOBOT_ID.'"] .chat-form{
-    display:none;
-}
-';
-
-    $script = "
-var idContacts = '';
-function atbcGetId(){
-    jQuery(document).on('click','#tab-chat .contact-box', function() {
-        idContacts = jQuery(this).data('contact');
-    });
-}
-rcl_add_action('rcl_footer','atbcGetId');
-rcl_add_action('rcl_get_ajax_chat_window','atbcGetId');
-
-function atbcClearAutobotPM(e){
-    if(".AUTOBOT_ID." === idContacts){
-        jQuery('.rcl-chat-window.ssi-modal .chat-private').attr('data-ids', idContacts);
-        setTimeout(function(){
-            jQuery('.rcl-chat-window.ssi-modal .chat-private').attr('data-token', '');
-            jQuery('.rcl-chat-window.ssi-modal .chat-form').remove();
-        },1500);
-    }
-}
-rcl_add_action('rcl_get_ajax_chat_window','atbcClearAutobotPM');
-";
-
-    // сожмём в строку
-    $script_min = atbc_inline($script);
-    $style_min = atbc_inline($style);
-
-    echo "<script>".$script_min.'</script><style>'.$style_min."</style>\r\n";
-}
-add_action('wp_footer', 'atbc_floatpm_clear_autobot_textarea', 15);
 
 
 // сожмем скрипты или стили для инлайна

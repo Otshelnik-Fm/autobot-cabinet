@@ -1,0 +1,56 @@
+#lk-content .message-manager > span {
+    padding: 0 0 20px;
+}
+.chat-messages-box .user-avatar a {
+    pointer-events: none;
+}
+#lk-content .chat-message .message-time {
+    color: #555;
+    font-size: 14px;
+}
+.rcl-chat .aub_active .message-box {
+    filter: hue-rotate(160deg);
+}
+/*sunshine*/
+.office-sunshine .cab_content {
+    margin: 15px 0 0;
+    min-height: 135px;
+}
+.office-sunshine div.lk-sidebar {
+    height: 120px;
+    margin: 0 15px;
+    width: 120px;
+}
+/*sunshine end*/
+/*grace*/
+.office-grace div#lk-conteyner {
+    min-height: 115px;
+}
+.office-grace .cab_lt_line {
+    margin-top: 25px;
+}
+/*grace end*/
+.office-across-ocean .ao_content_header {
+    max-height: 200px;
+    min-height: 200px;
+}
+.office-across-ocean .ao_left_lk {
+    height: 200px;
+    width: 133px;
+}
+.office-across-ocean #rcl-avatar {
+    display: flex;
+    justify-content: center;
+    max-height: 200px;
+    width: 133px;
+}
+.office-across-ocean #rcl-avatar img {
+    height: 200px;
+    width: auto;
+}
+#rcl-office.office-across-ocean .ao_name_author_lk h2 {
+    width: 100%;
+}
+.ao_under_name {
+    display: none;
+}

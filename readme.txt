@@ -1,13 +1,13 @@
 == Установка/Обновление ==
 
-<h3 style="text-align: center;">Установка:</h3>
+<h2 style="text-align:center;color:#26901b;font-weight:bold;">Установка:</h2>
 Т.к. это дополнение для WordPress плагина <a href="https://codeseller.ru/groups/plagin-wp-recall-lichnyj-kabinet-na-wordpress/" target="_blank">WP-Recall</a>, то оно устанавливается через <a href="https://codeseller.ru/obshhie-svedeniya-o-dopolneniyax-wp-recall/" target="_blank"><strong>менеджер дополнений WP-Recall</strong></a>.
 
 1. В админке вашего сайта перейдите на страницу "WP-Recall" -> "Дополнения" и в самом верху нажмите на кнопку "Обзор", выберите .zip архив дополнения на вашем пк и нажмите кнопку "Установить".
 2. В списке загруженных дополнений, на этой странице, найдите это дополнение, наведите на него курсор мыши и нажмите кнопку "Активировать". Или выберите чекбокс и в выпадающем списке действия выберите "Активировать". Нажмите применить.
 
 
-<h3 style="text-align: center;">Обновление:</h3>
+<h2 style="text-align:center;color:#26901b;font-weight:bold;">Обновление:</h2>
 Дополнение поддерживает <a href="https://codeseller.ru/avtomaticheskie-obnovleniya-dopolnenij-plagina-wp-recall/" target="_blank">автоматическое обновление</a> - два раза в день отправляются вашим сервером запросы на обновление.
 Если в течении суток вы не видите обновления (а на странице дополнения вы видите что версия вышла новая), советую ознакомиться с этой <a href="https://codeseller.ru/post-group/rabota-wordpress-krona-cron-prinuditelnoe-vypolnenie-kron-zadach-dlya-wp-recall/" target="_blank">статьёй</a>
 
@@ -27,7 +27,7 @@
 
 
 == FAQ ==
-<h3>С какими дополнениями он работает:</h3>
+<h3 style="color:#26901b;font-weight:bold;">С какими дополнениями он работает:</h3>
 
 <a href="https://codeseller.ru/?p=8341" target="_blank">Hello private message</a>
 <a href="https://codeseller.ru/?p=8350" target="_blank">Bonus on Registration</a>
@@ -41,28 +41,40 @@
 <a href="https://codeseller.ru/?p=17458" target="_blank">Bot User Info (информация о пользователе и краткая статистика)</a>
 <a href="https://codeseller.ru/?p=17655" target="_blank">Bot Weather In The City (Погода в заданном городе)</a>
 
+<hr style="border:1px solid #ddd;margin:18px;">
 
 
-<h3>Не могу ему написать:</h3>
+<h3 style="color:#26901b;font-weight:bold;">Не могу ему написать:</h3>
 всё верно - это односторонний чат для уведомлений
 
+<hr style="border:1px solid #ddd;margin:18px;">
 
-<h3>Работа с какими шаблонами личного кабинета проверялась:</h3>
+
+<h3 style="color:#26901b;font-weight:bold;">Работа с какими шаблонами личного кабинета проверялась:</h3>
 Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme, Theme Control
 
+<hr style="border:1px solid #ddd;margin:18px;">
 
-<h3>Какие еще варианты использования:</h3>
+
+<h3 style="color:#26901b;font-weight:bold;">Какие еще варианты использования:</h3>
 - если надо пользователю выслать предупреждение за какое либо нарушение без обсуждения - Автобот идеальный инструмент. Непрочитанное в течении часа сообщение отправится пользователю на его e-mail.
 Авторизуйтесь им на своем сайте и отправляйте сообщение как в обычном чате в личных сообщениях.
 
+<hr style="border:1px solid #ddd;margin:18px;">
 
-<h3>Есть описание API и работы с ним? как расширить?</h3>
+
+<h3 style="color:#26901b;font-weight:bold;">Есть описание API и работы с ним? как расширить?</h3>
 - да. В одной записи я сделал обзор некоторых функций и пример добавления чат-бота: <a href="https://codeseller.ru/?p=17464" target="_blank">Пишем дочернее дополнение для WP-Recall — чат-бот погоды в городе (используя ядро допа AutoBot Cabinet)</a> 
 
 
 
 
 == Changelog ==
+= 2020-03-25 =
+v3.1.0
+* поддержка Theme Control 2.0
+
+
 = 2018-10-31 =
 v3.0
 * реорганизация и рефакторинг    

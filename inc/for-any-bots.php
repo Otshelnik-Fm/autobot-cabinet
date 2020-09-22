@@ -58,7 +58,7 @@ function autobot_chat_wrapper( $message ) {
     $out .= '<div class="message-box">';
     $out .= '<span class="author-name">' . get_the_author_meta( 'display_name', AUTOBOT_ID ) . '</span>';
     $out .= '<div class="message-text">';
-    $out .= $message;
+    $out .= convert_smilies( nl2br( $message ) );
     $out .= '</div>';
     $out .= '</div>';
     $out .= '</div>';

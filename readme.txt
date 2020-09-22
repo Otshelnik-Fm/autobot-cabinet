@@ -71,6 +71,10 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 
 == Changelog ==
 = 2020-09-22 =
+v3.3.0
+* Включена поддержка передачи смайлов и переноса строк (например от бота Bot Rules)
+
+= 2020-09-22 =
 v3.2.0
 * Поддержка WP-Recall 16.24.0
 * Перевел на апи реколл кнопок - меньше css стилей

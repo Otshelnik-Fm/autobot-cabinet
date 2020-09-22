@@ -91,6 +91,17 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 ------------------------------
 
 ## Changelog:  
+**2020-09-22**  
+v3.2.0  
+* Поддержка WP-Recall 16.24.0  
+* Перевел на апи реколл кнопок - меньше css стилей  
+
+
+**2020-03-25**  
+v3.1.0  
+* поддержка Theme Control 2.0  
+
+
 **2018-10-31**  
 v3.0  
 * реорганизация и рефакторинг  

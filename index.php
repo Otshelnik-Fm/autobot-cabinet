@@ -14,7 +14,7 @@
  * баг мультисайта описан здесь https://otshelnik-fm.ru/?p=3629
  */
 if ( is_admin() && ! is_network_admin() ) {
-    require_once 'settings.php';
+    require_once 'inc/settings.php';
 }
 
 // функционал для чатботов

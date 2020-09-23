@@ -33,18 +33,20 @@ function atbc_is_autobot() {
 // ресурсы для чат-ботов
 add_action( 'rcl_enqueue_scripts', 'atbc_load_resource' );
 function atbc_load_resource() {
+    global $user_ID;
+
     if ( atbc_is_autobot() ) { // это кабинет Автобота
         rcl_enqueue_style( 'autobot_lk', rcl_addon_url( 'res/autobot-lk.css', __FILE__ ) );
 
-        if ( is_user_logged_in() ) {
+        // залогинен - но не сам автобот в своем лк
+        if ( is_user_logged_in() && ! rcl_is_office( $user_ID ) ) {
             rcl_enqueue_script( 'autobot_lk_logged', rcl_addon_url( 'res/autobot-lk-logged.js', __FILE__ ), false, true );
         }
     }
 
     if ( ! is_user_logged_in() )
-        return false;
+        return;
 
-    global $user_ID;
     if ( rcl_is_office( $user_ID ) ) {
         rcl_enqueue_script( 'autobot_user_lk', rcl_addon_url( 'res/user-lk.js', __FILE__ ), false, true );
     }
@@ -62,7 +64,8 @@ function atbc_dlobal_init() {
 // доступна js-переменная Rcl.autobot - содержит id автобота
 add_filter( 'rcl_init_js_variables', 'atbc_variable_autobot', 10 );
 function atbc_variable_autobot( $data ) {
-    $data['autobot'] = AUTOBOT_ID;
+    $data['autobot']     = AUTOBOT_ID;
+    $data['autobotName'] = get_user_meta( AUTOBOT_ID, 'first_name', true ) ? get_user_meta( AUTOBOT_ID, 'first_name', true ) : 'AutoBot';
 
     return $data;
 }
@@ -121,11 +124,15 @@ function atbc_del_except_chat_tab( $tabs ) {
 
 // для гостя сменим текст с "Авторизуйтесь, чтобы написать пользователю сообщение"
 function atbc_change_guest_text() {
-    $guest_text = '<div class="chat-notice">'
-        . '<span class="notice-error">Этот бот сможет рассылать вам новости сайта, подписки и уведомления.<br/>'
-        . 'Войдите на сайт и проверьте его работу</span>'
-        . '</div>';
-    return $guest_text;
+    $login = 'Войдите';
+    if ( rcl_get_option( 'login_form_recall', 'yes' ) == 0 ) {
+        $login = '<a href="#" class="rcl-login" style="text-decoration:underline;">Войдите</a>';
+    }
+
+    $guest_text = 'Этот бот сможет рассылать вам новости сайта, подписки и уведомления.<br/>'
+        . $login . ' на сайт и проверьте его работу';
+
+    return rcl_get_notice( [ 'type' => 'warning', 'text' => apply_filters( 'autobot_guest_text', $guest_text ) ] );
 }
 
 // удалим кнопки подписаться и в черный список. Это в ЛК бота не нужно

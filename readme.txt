@@ -29,6 +29,8 @@
 == FAQ ==
 <h3 style="color:#26901b;font-weight:bold;">С какими дополнениями он работает:</h3>
 
+<a href="https://codeseller.ru/products/direct-message/" target="_blank">Direct Message</a> - доп позволяет общаться в своём ЛК - не переходя в чужой
+
 <a href="https://codeseller.ru/?p=8341" target="_blank">Hello private message</a>
 <a href="https://codeseller.ru/?p=8350" target="_blank">Bonus on Registration</a>
 <a href="https://codeseller.ru/?p=16774" target="_blank">Subscription Two</a>
@@ -70,6 +72,11 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 
 
 == Changelog ==
+= 2021-02-22 =
+v3.4.1
+* корректная работа с дополнением <a href="https://codeseller.ru/products/direct-message/" target="_blank">Direct Message</a>
+
+
 = 2020-09-23 =
 v3.4.0
 * Исправлено переименовывание в ЛК автобота (если сам автобот его посещает) списка контактов

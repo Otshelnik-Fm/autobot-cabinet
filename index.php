@@ -24,6 +24,7 @@ require_once 'inc/for-any-bots.php';
 /* это кабинет автобота */
 function atbc_is_autobot() {
     global $user_LK;
+
     if ( rcl_is_office() && $user_LK == AUTOBOT_ID )
         return true;
 
@@ -36,11 +37,11 @@ function atbc_load_resource() {
     global $user_ID;
 
     if ( atbc_is_autobot() ) { // это кабинет Автобота
-        rcl_enqueue_style( 'autobot_lk', rcl_addon_url( 'res/autobot-lk.css', __FILE__ ) );
+        rcl_enqueue_style( 'autobot_lk', rcl_addon_url( 'assets/css/autobot-lk.css', __FILE__ ) );
 
         // залогинен - но не сам автобот в своем лк
         if ( is_user_logged_in() && ! rcl_is_office( $user_ID ) ) {
-            rcl_enqueue_script( 'autobot_lk_logged', rcl_addon_url( 'res/autobot-lk-logged.js', __FILE__ ), false, true );
+            //  rcl_enqueue_script( 'autobot_lk_logged', rcl_addon_url( 'assets/js/autobot-lk-logged.js', __FILE__ ), false, true );
         }
     }
 
@@ -48,11 +49,11 @@ function atbc_load_resource() {
         return;
 
     if ( rcl_is_office( $user_ID ) ) {
-        rcl_enqueue_script( 'autobot_user_lk', rcl_addon_url( 'res/user-lk.js', __FILE__ ), false, true );
+        rcl_enqueue_script( 'autobot_user_lk', rcl_addon_url( 'assets/js/user-lk.js', __FILE__ ), false, true );
     }
 
-    rcl_enqueue_style( 'autobot_core_style', rcl_addon_url( 'res/atbc-core.css', __FILE__ ) );
-    rcl_enqueue_script( 'autobot_core_script', rcl_addon_url( 'res/atbc-core.js', __FILE__ ), false, true );
+    rcl_enqueue_style( 'autobot_core_style', rcl_addon_url( 'assets/css/atbc-core.css', __FILE__ ) );
+    rcl_enqueue_script( 'autobot_core_script', rcl_addon_url( 'assets/js/atbc-core.js', __FILE__ ), false, true );
 }
 
 // идентификатор автобота для прочих ботов
@@ -76,6 +77,15 @@ function atbc_variable_autobot( $data ) {
 // так мы избавимся от их "моргания"
 add_filter( 'rcl_inline_styles', 'atbc_inline_style', 10 );
 function atbc_inline_style( $styles ) {
+    if ( ! rcl_is_office() )
+        $styles;
+
+    global $user_ID;
+
+    // самому боту можно
+    if ( $user_ID == AUTOBOT_ID && rcl_is_office( $user_ID ) )
+        return $styles;
+
     if ( ! atbc_is_autobot() )
         return $styles;
 

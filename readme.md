@@ -91,6 +91,11 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 ------------------------------
 
 ## Changelog:  
+**2021-02-22**  
+v3.4.1  
+* корректная работа с дополнением [Direct Message](https://codeseller.ru/products/direct-message/)  
+
+
 **2020-09-23**  
 v3.4.0  
 * Исправлено переименовывание в ЛК автобота (если сам автобот его посещает) списка контактов  

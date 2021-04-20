@@ -20,7 +20,6 @@ if ( is_admin() && ! is_network_admin() ) {
 // функционал для чатботов
 require_once 'inc/for-any-bots.php';
 
-
 /* это кабинет автобота */
 function atbc_is_autobot() {
     global $user_LK;
@@ -229,7 +228,7 @@ function atbc_chat_send_notify_messages() {
                 $message = implode( '<br>', $array_messages );
 
                 $content .= '<p style="margin: 0 0 10px;"><b>Текст сообщения:</b></p>';
-                $content .= '<p style="background-color: #f5f5f5;padding: 8px 12px;margin: 0;">' . wp_unslash( $message ) . '</p>';
+                $content .= '<div style="background-color: #f5f5f5;padding: 8px 12px;margin: 0;">' . wp_unslash( $message ) . '</div>';
             }
 
             $content .= '<p>Вы можете прочитать сообщение перейдя по ссылке: <a href="' . $url . '">' . $url . '</a></p>';
@@ -381,4 +380,25 @@ function atbc_inline( $src ) {
     $src_sanity = str_replace( ' {', '{', $src_non_space );
 
     return $src_sanity;
+}
+
+// если вкл direct_message - отключим кнопку цитирования
+add_action( 'wp_footer', 'atbc_direct_message_reply_hide', 15 );
+function atbc_direct_message_reply_hide() {
+    if ( ! is_user_logged_in() )
+        return;
+    if ( ! rcl_exist_addon( 'direct-message' ) )
+        return;
+    if ( ! rcl_is_office() )
+        return;
+
+    $style = '
+#tab-chat .chat-message[data-user_id="' . AUTOBOT_ID . '"] .dms-reply__bttn {
+    display: none !important;
+}
+';
+
+    $style_min = atbc_inline( $style );
+
+    echo "\r\n<style>" . $style_min . "</style>\r\n";
 }

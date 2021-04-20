@@ -72,6 +72,12 @@ Sunshine, Grace, Across Ocean, Across Ocean - PRO, Clear Sky, Line, Simple Theme
 
 
 == Changelog ==
+= 2021-04-20 =
+v3.4.2
+* небольшое исправление в отправляемом письме.
+* если включен доп <a href="https://codeseller.ru/products/direct-message/" target="_blank">Direct Message</a> - отключим кнопку цитирования
+
+
 = 2021-02-22 =
 v3.4.1
 * корректная работа с дополнением <a href="https://codeseller.ru/products/direct-message/" target="_blank">Direct Message</a>
